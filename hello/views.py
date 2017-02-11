@@ -33,7 +33,7 @@ def linebot(request):
         events_container = EventsContainer(request.body)
         event = events_container.events[0]
         if event.message.type == 'text':
-            result = _exec_command(event.message.text)
+            result = _exec_command(event.message.text.lower())
         else:
             result = 'We only receive text message'
         reply_message = ReplyMessage(event.reply_token, [Message.from_string(result)])

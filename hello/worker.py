@@ -18,7 +18,7 @@ def parse(expr_str):
 def _print_expr(expr):
     res = expr.doit()
     res_str = _convert_xor(str(res))
-    simp_str = _convert_xor(sympy.pretty(res.simplify()))
+    simp_str = _convert_xor(sympy.pretty(res.simplify(), use_unicode=True))
     return_string = 'result:\n{}\n\nbeautified result:\n{}'.format(res_str, simp_str)
     return return_string
 
