@@ -9,16 +9,18 @@ def parse(expr_str):
     try:
         expr = sympy.sympify(expr_str)
         return _print_expr(expr)
-    except sympy.SympifyError:
+    except sympy.SympifyError as e:
+        print(e)
         return 'Please input right expression'
-    except TypeError:
+    except TypeError as e:
+        print(e)
         return 'Type error'
 
 
 def _print_expr(expr):
     res = expr.doit()
     res_str = _convert_xor(str(res))
-    simp_str = _convert_xor(res.simplify())
+    simp_str = _convert_xor(str(res.simplify()))
     return_string = 'result:\n{}\n\nsimplified result:\n{}'.format(res_str, simp_str)
     return return_string
 
