@@ -18,6 +18,10 @@ class Message:
     def to_dict(self):
         return self._message
 
+    @staticmethod
+    def from_string(message_str):
+        return Message({'text': message_str, 'type': 'text', 'id': ''})
+
 
 class Source:
     def __init__(self, source):
