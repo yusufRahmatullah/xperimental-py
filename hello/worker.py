@@ -4,7 +4,7 @@ import re
 
 import sympy
 
-ABOUT_TEXT = """ MathCalc - Utility to help you solve mathematics problems
+ABOUT_TEXT = """ MyCalc - Utility to help you solve mathematics problems
 This bot is created by anakarwin@gmail.com.
 Send me suggestion to support this bot or just line me id: anakarwin.
 This bot is created using python programming language,
@@ -14,7 +14,7 @@ Believe me, everyone can code. Learn how to code in http://code.org.
 You can create your own program. If you wanna share or ask anything about programming, please tell me.
 
 --------
-MathCalc version 0.1.0
+MyCalc version 0.1.0
 """
 COMMANDS_HELP = {
     "diff": """ diff(expr) - return derivative of expr
@@ -154,7 +154,7 @@ Matrix([1,2], [3,4])
     Matrix([[1, 3], [2, 4]])
 """
 }
-DEFAULT_HELP = """ MathCalc - Utility to help you solve mathematics problems
+DEFAULT_HELP = """ MyCalc - Utility to help you solve mathematics problems
 Type 'help' to show this message.
 You can compute simple math as '1+1' or more complex math using functions.
 These is available function:
