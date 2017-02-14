@@ -1,18 +1,29 @@
+import os
 import requests
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
+from linebot import LineBotApi
+# from linebot import WebhookHandler
+# from linebot.exceptions import InvalidSignatureError
+# from linebot.models import MessageEvent, TextMessage, TextSendMessage
 
 from .models import *
 from .worker import exec_command
 
-CHANNEL_ACCESS_TOKEN = "xjNlgBf2p8rHke5W5iu/gNXjci1p0navxxgqyK3CRPVdHRvFoWhd9QT7YK/YqAlhU7eXAK3Sb91X3DAGv67jn9vGIgjHMBnGtZ7U019Xa2gQeHMvd1vg6LCscRw5EqS+5KcC7+RZV9QcRX8nfLkBLwdB04t89/1O/w1cDnyilFU="
+
+CHANNEL_ACCESS_TOKEN = os.environ['CHANNEL_ACCESS_TOKEN']
+CHANNEL_SECRET = os.environ['CHANNEL_SECRET']
+HELP_IMAGE_LINK = 'https://s19.postimg.org/50b2xcdmr/help.jpg'
+HELP_IMAGE_REVIEW_LINK = 'https://s19.postimg.org/6gmlfhgjn/help_preview.jpg'
 LINE_API_REPLY = "https://api.line.me/v2/bot/message/reply"
 LINE_API_PUSH = "https://api.line.me/v2/bot/message/push"
 LINE_API_HEADERS = {
     "Content-Type": "application/json",
     "Authorization": "Bearer {}".format(CHANNEL_ACCESS_TOKEN)
 }
+# line_bot_api = LineBotApi(CHANNEL_ACCESS_TOKEN)
+# line_handler = WebhookHandler(CHANNEL_SECRET)
 
 
 # Create your views here.
@@ -39,7 +50,11 @@ def linebot(request):
             result = exec_command(event.message.text.lower())
         else:
             result = 'We only receive text message'
-        reply_message = ReplyMessage(event.reply_token, [Message.from_string(result)])
+        if event.message.text.strip() == 'help':
+            reply_message = ReplyMessage(event.reply_token, [Message.from_string(result), 
+            ImageMessage(HELP_IMAGE_LINK, HELP_IMAGE_REVIEW_LINK)])
+        else:
+            reply_message = ReplyMessage(event.reply_token, [Message.from_string(result)])
         res = requests.post(LINE_API_REPLY, data=reply_message.to_json(), headers=LINE_API_HEADERS)
         print res.text
         return HttpResponse(reply_message.to_json())

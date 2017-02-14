@@ -25,7 +25,7 @@ diff(cos(x))
 """,
     "factor": """ factor(expr) - return factor of expr
 ex:
-factor(x**2 - 2*x - 8)
+factor(x^2 - 2*x - 8)
 >>> result:
     (x - 4)*(x + 2)
 """,
@@ -154,8 +154,9 @@ Matrix([1,2], [3,4])
     Matrix([[1, 3], [2, 4]])
 """
 }
-DEFAULT_HELP = """ MyCalc - Utility to help you solve mathematics problems
-Type 'help' to show this message.
+DEFAULT_HELP = """ MyCalc - @ist0487t
+Utility to help you solve mathematics problems
+
 You can compute simple math as '1+1' or more complex math using functions.
 These is available function:
 
@@ -172,9 +173,9 @@ solve(expr) - solve equations of expr
 
 Type 'help <function>' to show more details about function.
 
-available trigonometry: sin, cos, tan, asin, acos, atan, sinh, cosh, tanh
-commons function: abs, factorial, sqrt
-commons constant: pi
+available trigonometry: sin, cos, tan, asin, acos, atan, sinh, cosh, tanh, sec, csc, cot, asec, acsc, acot
+commons function: abs, deg, factorial, rad, sqrt
+commons constant: inf, oo, pi
 
 notes: expr using mathematical logic
 using 2*x instead of 2x or
@@ -211,11 +212,11 @@ def exec_command(command_str):
         return """ You cannot see the source of code via Line """
     else:
         if 'matrix' in command_str:
-            return parse(re.sub('matrix', 'Matrix', command_str))
-        return parse(command_str)
+            return _parse(re.sub('matrix', 'Matrix', command_str))
+        return _parse(command_str)
 
 
-def parse(expr_str):
+def _parse(expr_str):
     try:
         expr = sympy.sympify(expr_str)
         return _print_expr(expr)
@@ -231,10 +232,12 @@ def _print_expr(expr):
     try:
         res_str = _convert_xor(str(expr))
         simp_str = _convert_xor(str(expr.simplify()))
-        if res_str == simp_str:
-            return_string = 'result:\n{}'.format(res_str)
-        else:
-            return_string = 'result:\n{}\n\nsimplified result:\n{}'.format(res_str, simp_str)
+        eval_str = _convert_xor(str(expr.evalf()))
+        return_string = 'result:\n{}'.format(res_str)
+        if res_str != eval_str:
+            return_string  += '\n\nevaluated result:\n{}'.format(eval_str)
+        if res_str != simp_str and eval_str != simp_str:
+            return_string += '\n\nsimplified result:\n{}'.format(simp_str)
         return return_string
     except AttributeError as e:
         print(e)

@@ -22,6 +22,22 @@ class Message:
     def from_string(message_str):
         return Message({'text': message_str, 'type': 'text', 'id': ''})
 
+class ImageMessage():
+    def __init__(self, original_url, preview_url = ''):
+        self._dict = {
+            "type": "image",
+            "originalContentUrl": original_url,
+            "previewImageUrl": ""
+        }
+        if preview_url != '':
+            self._dict["previewImageUrl"] = preview_url
+    
+    def to_dict(self):
+        return self._dict
+    
+    def to_json(self):
+        return json.dumps(self._dict)
+    
 
 class Source:
     def __init__(self, source):
