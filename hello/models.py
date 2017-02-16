@@ -31,6 +31,8 @@ class ImageMessage():
         }
         if preview_url != '':
             self._dict["previewImageUrl"] = preview_url
+        else:
+            self._dict["previewImageUrl"] = original_url
     
     def to_dict(self):
         return self._dict
