@@ -15,7 +15,7 @@ from .worker import exec_command
 CHANNEL_ACCESS_TOKEN = os.environ['CHANNEL_ACCESS_TOKEN']
 CHANNEL_SECRET = os.environ['CHANNEL_SECRET']
 HELP_IMAGE_LINK = 'https://s19.postimg.org/50b2xcdmr/help.jpg'
-HELP_IMAGE_REVIEW_LINK = 'https://s19.postimg.org/6gmlfhgjn/help_preview.jpg''
+HELP_IMAGE_REVIEW_LINK = 'https://s19.postimg.org/6gmlfhgjn/help_preview.jpg'
 HELP_IMAGE_JHS = 'https://s19.postimg.org/9xq4fnjer/jhs.jpg'
 HELP_IMAGE_SHS_1 = 'https://s19.postimg.org/3laz5tgcj/shs1.jpg'
 HELP_IMAGE_SHS_2 = 'https://s19.postimg.org/t5d9c91qb/shs2.jpg'
@@ -60,9 +60,9 @@ def linebot(request):
         if event.message.text.strip() == 'help':
             reply_message = ReplyMessage(event.reply_token, [Message.from_string(result), 
             ImageMessage(HELP_IMAGE_LINK, HELP_IMAGE_REVIEW_LINK),
-			ImageMessage(HELP_IMAGE_JHS),
-			ImageMessage(HELP_IMAGE_SHS_1),
-			ImageMessage(HELP_IMAGE_SHS_2)])
+            ImageMessage(HELP_IMAGE_JHS),
+            ImageMessage(HELP_IMAGE_SHS_1),
+            ImageMessage(HELP_IMAGE_SHS_2)])
         else:
             reply_message = ReplyMessage(event.reply_token, [Message.from_string(result)])
         res = requests.post(LINE_API_REPLY, data=reply_message.to_json(), headers=LINE_API_HEADERS)
