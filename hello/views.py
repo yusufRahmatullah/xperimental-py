@@ -47,7 +47,11 @@ def linebot(request):
         events_container = EventsContainer(request.body)
         event = events_container.events[0]
         if event.message.type == 'text':
-            result = exec_command(event.message.text.lower())
+            try:
+                result = exec_command(event.message.text.lower())
+            except Exception:
+                print(event.message.text.lower())
+                result = 'Input was error'
         else:
             result = 'We only receive text message'
         if event.message.text.strip() == 'help':
@@ -56,7 +60,6 @@ def linebot(request):
         else:
             reply_message = ReplyMessage(event.reply_token, [Message.from_string(result)])
         res = requests.post(LINE_API_REPLY, data=reply_message.to_json(), headers=LINE_API_HEADERS)
-        print res.text
         return HttpResponse(reply_message.to_json())
 
 
