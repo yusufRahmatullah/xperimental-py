@@ -57,6 +57,12 @@ integrate(sin(x))
 >>> result:
     -cos(x)
 """,
+    "inverse_function": """ inverse_func(f) - return inverse of funtion f
+ex:
+inverse_func(x + 1)
+>>> result:
+    x - 1
+""",
     "limit": """ limit(expr, base, target) - limit of base to target from expr
 using double o (oo) as infinity
 ex:
@@ -197,7 +203,7 @@ matrix(nums) - create matrix object. see 'help matrix'
 Type 'help <function>' to show more details about function.
 
 available trigonometry: sin, cos, tan, asin, acos, atan, sec, csc, cot, asec, acsc, acot
-hyperbolic functions: sinh, cosh, tanh
+hyperbolic function: sinh, cosh, tanh
 commons function: abs, deg, factorial, rad, sqrt
 commons constant: oo, pi
 
