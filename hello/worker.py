@@ -24,7 +24,11 @@ def exec_command(command_str):
         return 'You cannot see the source of code via Line'
     else:
         if 'matrix' in command_str:
-            return _parse(re.sub('matrix', 'Matrix', command_str))
+            clean_expr = re.sub('matrix\*\(', 'matrix(', command_str)
+            return _parse(re.sub('matrix', 'Matrix', clean_expr))
+        elif 'simplify' in command_str:
+            clean_expr = re.sub('simplify\*', 'simplify', command_str)
+            return _parse(clean_expr)
         elif 'simplify_logic' in command_str:
             logic_expr = sympy.sympify(command_str)
             return _print_expr(_logic_to_str(logic_expr))
@@ -82,15 +86,27 @@ def _print_expr(expr):
     try:
         eval_expr = expr.evalf()
         simp_expr = expr.simplify()
+        expand_expr = sympy.expand(expr)
+        expand_trig_expr = sympy.expand_trig(expr)
+        factor_expr = sympy.factor(expr)
         
         res_str = _convert_xor(str(expr))
         return_string = 'result:\n{}'.format(res_str)
         if expr != eval_expr and None != eval_expr:
             eval_str = _convert_xor(str(eval_expr))
-            return_string  += '\n\nevaluated result:\n{}'.format(eval_str)
+            return_string  += '\n\nalternative (eval with float):\n{}'.format(eval_str)
         if expr != simp_expr and None != simp_expr:
             simp_str = _convert_xor(str(simp_expr))
-            return_string += '\n\nsimplified result:\n{}'.format(simp_str)
+            return_string += '\n\nalternative (simplified):\n{}'.format(simp_str)
+        if expr != expand_expr and None != expand_expr:
+            expand_str = _convert_xor(str(expand_expr))
+            return_string += '\n\nalternative (expanded):\n{}'.format(expand_str)
+        elif expr != expand_trig_expr and None != expand_trig_expr:
+            expand_trig_str = _convert_xor(str(expand_trig_expr))
+            return_string += '\n\nalternative (trigonometry expanded):\n{}'.format(expand_trig_str)
+        elif expr != factor_expr and None != factor_expr:
+            factor_str = _convert_xor(str(factor_expr))
+            return_string += '\n\nalternative (factor):\n{}'.format(factor_str)
         return return_string
     except AttributeError as e:
         print(e)
@@ -102,7 +118,10 @@ def _print_expr(expr):
 
 
 def _convert_xor(expr_str):
-    return re.sub('\*\*', '^', expr_str)
+    clean_expr = re.sub('\*\*', '^', expr_str)
+    clean_expr = re.sub('([\d\)x-z])\*([x-z\(])', r'\g<1>\g<2>', clean_expr)
+    clean_expr = re.sub('([\d\)x-z])\*sqrt', r'\g<1>' + 'sqrt', clean_expr)
+    return clean_expr
 
 
 def _logic_to_str(expr):

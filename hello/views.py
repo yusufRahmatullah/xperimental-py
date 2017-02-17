@@ -1,4 +1,5 @@
 import os
+import re
 import requests
 from django.http import HttpResponse
 from django.shortcuts import render
@@ -48,24 +49,30 @@ def db(request):
 def linebot(request):
     if request.method == 'POST':
         events_container = EventsContainer(request.body)
-        event = events_container.events[0]
-        if event.message.type == 'text':
-            try:
-                result = exec_command(event.message.text.lower())
-            except Exception:
-                print(event.message.text.lower())
-                result = 'Input was error'
-        else:
-            result = 'We only receive text message'
-        if event.message.text.strip() == 'help':
-            reply_message = ReplyMessage(event.reply_token, [Message.from_string(result), 
-            ImageMessage(HELP_IMAGE_LINK, HELP_IMAGE_REVIEW_LINK),
-            ImageMessage(HELP_IMAGE_JHS),
-            ImageMessage(HELP_IMAGE_SHS_1),
-            ImageMessage(HELP_IMAGE_SHS_2)])
-        else:
-            reply_message = ReplyMessage(event.reply_token, [Message.from_string(result)])
-        res = requests.post(LINE_API_REPLY, data=reply_message.to_json(), headers=LINE_API_HEADERS)
+        for event in events_container.events:
+            if event.message.type == 'text':
+                try:
+                    # remove pain by allow user to not write *
+                    clean_text = re.sub('(\d+)([x-z])', r'\g<1>' + '*' + r'\g<2>', event.message.text.lower())
+                    clean_text = re.sub('([\)\dx-z])(\()', r'\g<1>' + '*' + r'\g<2>', clean_text)
+                    clean_text = re.sub('([\d\)x-z])sqrt', r'\g<1>'+'*sqrt', clean_text)
+                    print(clean_text)
+                    result = exec_command(clean_text)
+                except Exception as e:
+                    print(e)
+                    print(event.message.text.lower())
+                    result = 'Input was error'
+            else:
+                result = 'We only receive text message'
+            if event.message.text.strip() == 'help':
+                reply_message = ReplyMessage(event.reply_token, [Message.from_string(result), 
+                ImageMessage(HELP_IMAGE_LINK, HELP_IMAGE_REVIEW_LINK),
+                ImageMessage(HELP_IMAGE_JHS),
+                ImageMessage(HELP_IMAGE_SHS_1),
+                ImageMessage(HELP_IMAGE_SHS_2)])
+            else:
+                reply_message = ReplyMessage(event.reply_token, [Message.from_string(result)])
+            res = requests.post(LINE_API_REPLY, data=reply_message.to_json(), headers=LINE_API_HEADERS)
         return HttpResponse(reply_message.to_json())
 
 

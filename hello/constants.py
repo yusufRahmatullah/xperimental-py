@@ -8,7 +8,7 @@ Believe me, everyone can code. Learn how to code in http://code.org.
 You can create your own program. If you wanna share or ask anything about programming, please tell me.
 
 --------
-MyCalc version 0.1.1
+MyCalc version 0.2.0
 """
 
 COMMANDS_HELP = {
