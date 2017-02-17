@@ -7,6 +7,7 @@ All available commands are store in their website, try it your self.
 Believe me, everyone can code. Learn how to code in http://code.org.
 You can create your own program. If you wanna share or ask anything about programming, please tell me.
 
+sympy created by SymPy Development Team under simplified (2-clause) BSD License
 --------
 MyCalc version 0.2.0
 """
